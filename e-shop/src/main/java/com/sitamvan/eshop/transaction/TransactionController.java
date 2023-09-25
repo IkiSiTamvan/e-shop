@@ -2,7 +2,6 @@ package com.sitamvan.eshop.transaction;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,12 +14,15 @@ import com.sitamvan.eshop.util.HandledException;
 @RestController
 @RequestMapping("/api")
 public class TransactionController {
-    @Autowired
     TransactionService transactionService;
-    
+
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
     @PostMapping("/transaction/customer/{id}")
     @Transactional
-    public ResponseEntity<TrxDto> finalize(@PathVariable("id") Integer custId) throws HandledException{
+    public ResponseEntity<TrxDto> finalize(@PathVariable("id") Integer custId) throws HandledException {
         TrxDto trxDto = transactionService.finalize(custId);
         return new ResponseEntity<TrxDto>(trxDto, HttpStatus.OK);
     }

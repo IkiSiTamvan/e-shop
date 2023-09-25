@@ -2,7 +2,6 @@ package com.sitamvan.eshop.cart;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +18,11 @@ import com.sitamvan.eshop.util.HandledException;
 @RestController
 @RequestMapping("/api")
 public class CartController {
-    @Autowired
     CartService cartService;
+
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     @PostMapping("/cart")
     public ResponseEntity<CartDto> addCart(@RequestParam(required = true) Integer custId,
@@ -32,7 +34,7 @@ public class CartController {
     }
 
     @PostMapping("/cart/items")
-    //@Transactional //if needed
+    // @Transactional //if needed
     public ResponseEntity<CartDto> addItemsToCart(@Valid @RequestBody CartDto cart) throws HandledException {
 
         CartDto cartDto = cartService.save(cart);
