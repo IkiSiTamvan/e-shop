@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ItemController {
-    @Autowired
     ItemService itemService;
 
-    @Autowired
     private ModelMapper modelMapper;
+
+    public ItemController(ItemService itemService, ModelMapper modelMapper) {
+        this.itemService = itemService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping("/items")
     public ResponseEntity<List<ItemDto>> getAllItems(@RequestParam(required = false, defaultValue = "0") Integer page,

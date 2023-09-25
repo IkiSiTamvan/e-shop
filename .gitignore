@@ -1,11 +1,12 @@
 HELP.md
 /e-shop/target/
+**/target/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+### STS ### 
 .apt_generated
 .classpath
 .factorypath
@@ -25,7 +26,7 @@ target/
 /nbproject/private/
 /nbbuild/
 /dist/
-/nbdist/
+/nbdist/rt4eedffll[u/555z   68
 /.nb-gradle/
 build/
 !**/src/main/**/build/
@@ -33,3 +34,4 @@ build/
 
 ### VS Code ###
 .vscode/
+e-shop/target/*
