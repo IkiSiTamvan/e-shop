@@ -20,12 +20,15 @@ public class ItemDto {
 
     private String desc;
     private String category;
+
+    @NotNull
     private Double price;
 
     @Max(value = 5)
     @Min(value = 0)
     private Float rating;
 
+    @NotNull
     private Integer stock;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+7")

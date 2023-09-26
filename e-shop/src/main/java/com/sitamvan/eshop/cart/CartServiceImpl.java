@@ -18,7 +18,7 @@ import com.sitamvan.eshop.util.HandledException;
 
 @Service
 public class CartServiceImpl implements CartService {
-
+    
     CartRepository cartRepository;
 
     ItemService itemService;
@@ -36,7 +36,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart save(Cart cart) {
+    public Cart save(Cart cart) throws HandledException {
+        Optional<Customer> custOpt = customerService.findCustomerById(cart.getCustomerId());
+
+        if (!custOpt.isPresent()) {
+            throw new HandledException(ErrorType.CUSTOMER_NOT_FOUND);
+        }
+        
+        Optional<Item> itemOpt = itemService.getItemById(cart.getItemId());
+        if (!itemOpt.isPresent()) {
+            throw new HandledException(ErrorType.ITEM_NOT_FOUND);
+        }
+        Item item = itemOpt.get();
+        if (item.getStock() < cart.getQty()) {
+            throw new HandledException(ErrorType.ITEM_INSUFFICIENT);
+        }
+
+
         return cartRepository.save(cart);
     }
 
