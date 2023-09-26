@@ -180,7 +180,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void delete(Cart cart) {
+    public void delete(Cart cart) throws HandledException {
+        Optional<Customer> custOpt = customerService.findCustomerById(cart.getCustomerId());
+
+        if (!custOpt.isPresent()) {
+            throw new HandledException(ErrorType.CUSTOMER_NOT_FOUND);
+        }
         cartRepository.delete(cart);
     }
 }
