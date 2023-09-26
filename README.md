@@ -1,10 +1,10 @@
 # E-Shop
 
-A service created with spring boot that manage customer, item, cart and transaction.  
+A service created with spring boot, to imitate some functionality of customer, item, cart, and transaction service . It covers some crud example of item & customer, cart management, and transaction record.
 
-With validation using spring boot validation, that validate the incoming request;
-an example of standar Exception usage, and its handler;
-some unitTest to ensure some main validation is checked when there are changes;
+- With validation using spring boot validation, that validate the incoming request;
+- an example of standar Exception usage, and its handler;
+- some unitTest to ensure some main validation is checked when there are changes;
 
 ## API Reference
 
