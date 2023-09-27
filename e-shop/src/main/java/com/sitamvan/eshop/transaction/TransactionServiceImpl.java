@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sitamvan.eshop.cart.Cart;
@@ -19,24 +18,29 @@ import com.sitamvan.eshop.util.HandledException;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
-    @Autowired
     TransactionRepository transactionRepository;
 
-    @Autowired
     CustomerService customerService;
 
-    @Autowired
     CartService cartService;
 
-    @Autowired
     ItemService itemService;
 
-    @Autowired
     TrxDetailService trxDetailService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper modelMapper;   
 
+
+    public TransactionServiceImpl(TransactionRepository transactionRepository, CustomerService customerService,
+            CartService cartService, ItemService itemService, TrxDetailService trxDetailService,
+            ModelMapper modelMapper) {
+        this.transactionRepository = transactionRepository;
+        this.customerService = customerService;
+        this.cartService = cartService;
+        this.itemService = itemService;
+        this.trxDetailService = trxDetailService;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public TrxDto finalize(Integer custId) throws HandledException {

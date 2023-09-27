@@ -3,7 +3,6 @@ package com.sitamvan.eshop.customer;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,16 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
-    @Autowired
+
     CustomerService customerService;
 
-    @Autowired
     private ModelMapper modelMapper;
-    
+
+    public CustomerController(CustomerService customerService, ModelMapper modelMapper) {
+        this.customerService = customerService;
+        this.modelMapper = modelMapper;
+    }
+
     @PostMapping("/customers")
-    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto){
+    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
         try {
-            Customer customer = customerService.save(new Customer(customerDto.getName(), customerDto.getEmail(), customerDto.getPhone()));
+            Customer customer = customerService
+                    .save(new Customer(customerDto.getName(), customerDto.getEmail(), customerDto.getPhone()));
             return new ResponseEntity<>(convertToDto(customer), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

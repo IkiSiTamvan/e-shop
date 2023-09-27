@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -19,21 +18,41 @@ import com.sitamvan.eshop.util.HandledException;
 
 @Service
 public class CartServiceImpl implements CartService {
-
-    @Autowired
+    
     CartRepository cartRepository;
 
-    @Autowired
     ItemService itemService;
 
-    @Autowired
     CustomerService customerService;
 
-    @Autowired
     private ModelMapper modelMapper;
 
+    public CartServiceImpl(CartRepository cartRepository, ItemService itemService, CustomerService customerService,
+            ModelMapper modelMapper) {
+        this.cartRepository = cartRepository;
+        this.itemService = itemService;
+        this.customerService = customerService;
+        this.modelMapper = modelMapper;
+    }
+
     @Override
-    public Cart save(Cart cart) {
+    public Cart save(Cart cart) throws HandledException {
+        Optional<Customer> custOpt = customerService.findCustomerById(cart.getCustomerId());
+
+        if (!custOpt.isPresent()) {
+            throw new HandledException(ErrorType.CUSTOMER_NOT_FOUND);
+        }
+        
+        Optional<Item> itemOpt = itemService.getItemById(cart.getItemId());
+        if (!itemOpt.isPresent()) {
+            throw new HandledException(ErrorType.ITEM_NOT_FOUND);
+        }
+        Item item = itemOpt.get();
+        if (item.getStock() < cart.getQty()) {
+            throw new HandledException(ErrorType.ITEM_INSUFFICIENT);
+        }
+
+
         return cartRepository.save(cart);
     }
 
@@ -119,7 +138,8 @@ public class CartServiceImpl implements CartService {
             try {
                 cartRepository.save(cart);
             } catch (DataIntegrityViolationException e) {
-                List<Cart> cartList = cartRepository.findByCustomerIdAndItemId(cartItems.getCustomerId(), cartItem.getItemId());
+                List<Cart> cartList = cartRepository.findByCustomerIdAndItemId(cartItems.getCustomerId(),
+                        cartItem.getItemId());
                 Cart cartUpdate = cartList.get(0);
                 cartUpdate.setQty(cartItem.getQuantity());
                 cartRepository.save(cartUpdate);
@@ -140,7 +160,7 @@ public class CartServiceImpl implements CartService {
         Customer cust = custOpt.get();
 
         List<Cart> thisItem = cartRepository.findByCustomerIdAndItemId(custId, itemId);
-        if(thisItem.isEmpty()){
+        if (thisItem.isEmpty()) {
             throw new HandledException(ErrorType.ITEM_NOT_IN_CHART);
         }
         Cart itemToDelete = thisItem.get(0);
@@ -155,12 +175,17 @@ public class CartServiceImpl implements CartService {
         if (!custOpt.isPresent()) {
             throw new HandledException(ErrorType.CUSTOMER_NOT_FOUND);
         }
-        Customer cust = custOpt.get(); 
+        Customer cust = custOpt.get();
         return convertToCartDto(cust);
     }
 
     @Override
-    public void delete(Cart cart) {
+    public void delete(Cart cart) throws HandledException {
+        Optional<Customer> custOpt = customerService.findCustomerById(cart.getCustomerId());
+
+        if (!custOpt.isPresent()) {
+            throw new HandledException(ErrorType.CUSTOMER_NOT_FOUND);
+        }
         cartRepository.delete(cart);
     }
 }

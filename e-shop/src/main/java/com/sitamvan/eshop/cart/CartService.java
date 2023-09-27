@@ -5,8 +5,8 @@ import java.util.List;
 import com.sitamvan.eshop.util.HandledException;
 
 public interface CartService {
-    void delete (Cart cart);
-    Cart save (Cart cart);
+    void delete (Cart cart) throws HandledException;
+    Cart save (Cart cart) throws HandledException;
     CartDto save(Integer custId, Integer itemId, Integer itemQty) throws HandledException;
     CartDto save(CartDto cartItems) throws HandledException;
     CartDto delete(Integer custId, Integer itemId) throws HandledException ;
