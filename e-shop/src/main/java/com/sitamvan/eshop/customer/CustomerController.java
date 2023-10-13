@@ -29,9 +29,9 @@ public class CustomerController {
             Customer customer = customerService
                     .save(new Customer(customerDto.getName(), customerDto.getEmail(), customerDto.getPhone()));
             return new ResponseEntity<>(convertToDto(customer), HttpStatus.CREATED);
-            int conflict = 1300;
-            //test changes in need conflict
-            //test changes 3
+            int conflict = 0;
+            //test changes in intellij
+            //test changes 2
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
