@@ -30,6 +30,7 @@ public class CustomerController {
                     .save(new Customer(customerDto.getName(), customerDto.getEmail(), customerDto.getPhone()));
             return new ResponseEntity<>(convertToDto(customer), HttpStatus.CREATED);
             //test changes in intellij
+            //test changes 2
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
